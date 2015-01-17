@@ -48,7 +48,17 @@
                                         :output-dir    "resources/public/js/out"
                                         :externs       ["react/externs/react.js"]
                                         :optimizations :none
-                                        :pretty-print  true}}}}
+                                        :pretty-print  true}}
+                       :test {:source-paths ["src/cljs" "test/cljs"]
+                              :compiler {:output-to "target/test.js"
+                                         :optimizations :whitespace
+                                         :pretty-print true
+                                         :preamble ["react/react.js"]}}}
+              :test-commands {"unit" ["phantomjs" :runner
+                                      "test/vendor/es5-shim.js"
+                                      "test/vendor/es5-sham.js"
+                                      "test/vendor/console-polyfill.js"
+                                      "target/test.js"]}}
 
   :profiles {:dev {:repl-options {:init-ns reagtest.handler
                                   :nrepl-middleware [cemerick.piggieback/wrap-cljs-repl]}
@@ -57,7 +67,8 @@
                                   [ring/ring-devel "1.3.2"]
                                   [pjstadig/humane-test-output "0.6.0"]]
 
-                   :plugins [[lein-figwheel "0.2.0-SNAPSHOT"]]
+                   :plugins [[lein-figwheel "0.2.0-SNAPSHOT"]
+                             [com.cemerick/clojurescript.test "0.3.3"]]
 
                    :injections [(require 'pjstadig.humane-test-output)
                                 (pjstadig.humane-test-output/activate!)]
